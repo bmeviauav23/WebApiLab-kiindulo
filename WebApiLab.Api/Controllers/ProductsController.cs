@@ -18,33 +18,38 @@ public class ProductsController : ControllerBase
 
     // GET: api/<ProductsController>
     [HttpGet]
-    public IEnumerable<Product> Get()
+    public ActionResult<IEnumerable<Product>> Get()
     {
         return _productService.GetProducts();
     }
 
     // GET api/<ProductsController>/5
     [HttpGet("{id}")]
-    public string Get(int id)
+    public ActionResult<Product> Get(int id)
     {
-        return "value";
+        return _productService.GetProduct(id);
     }
 
     // POST api/<ProductsController>
     [HttpPost]
-    public void Post([FromBody] string value)
+    public ActionResult<Product> Post([FromBody] Product product)
     {
+        var created = _productService.InsertProduct(product);
+        return CreatedAtAction(nameof(Get), new { id = created.Id }, created);
     }
 
     // PUT api/<ProductsController>/5
     [HttpPut("{id}")]
-    public void Put(int id, [FromBody] string value)
+    public ActionResult<Product> Put(int id, [FromBody] Product product)
     {
+        return _productService.UpdateProduct(id, product);
     }
 
     // DELETE api/<ProductsController>/5
     [HttpDelete("{id}")]
-    public void Delete(int id)
+    public ActionResult Delete(int id)
     {
+        _productService.DeleteProduct(id);
+        return NoContent();
     }
 }

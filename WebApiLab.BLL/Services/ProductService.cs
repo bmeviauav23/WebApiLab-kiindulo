@@ -4,6 +4,7 @@ using WebApiLab.Bll.Interfaces;
 using WebApiLab.Dal;
 using WebApiLab.Bll.Dtos;
 using AutoMapper.QueryableExtensions;
+using WebApiLab.Bll.Exceptions;
 
 namespace WebApiLab.Bll.Services;
 
@@ -18,33 +19,45 @@ public class ProductService : IProductService
         _mapper = mapper;
     }
 
-    public IEnumerable<Product> GetProducts()
+    public List<Product> GetProducts()
     {
         var products = _context.Products
             .ProjectTo<Product>(_mapper.ConfigurationProvider)
-            .AsEnumerable();
+            .ToList();
 
         return products;
     }
 
     public Product GetProduct(int productId)
     {
-        throw new NotImplementedException();
+        return _context.Products
+            .ProjectTo<Product>(_mapper.ConfigurationProvider)
+            .SingleOrDefault(p => p.Id == productId)
+            ?? throw new EntityNotFoundException("Nem található a termék");
     }
 
     public Product InsertProduct(Product newProduct)
     {
-        throw new NotImplementedException();
+        var efProduct = _mapper.Map<Dal.Entities.Product>(newProduct);
+        _context.Products.Add(efProduct);
+        _context.SaveChanges();
+        return GetProduct(efProduct.Id);
     }
 
-    public void UpdateProduct(int productId, Product updatedProduct)
+    public Product UpdateProduct(int productId, Product updatedProduct)
     {
-        throw new NotImplementedException();
+        var efProduct = _context.Products.SingleOrDefault(p => p.Id == productId)
+            ?? throw new EntityNotFoundException("Nem található a termék");
+        _mapper.Map(updatedProduct, efProduct);
+        _context.SaveChanges();
+        return GetProduct(efProduct.Id);
     }
 
     public void DeleteProduct(int productId)
     {
-        throw new NotImplementedException();
+        var efProduct = _context.Products.SingleOrDefault(p => p.Id == productId)
+            ?? throw new EntityNotFoundException("Nem található a termék");
+        _context.Products.Remove(efProduct);
+        _context.SaveChanges();
     }
-
 }
