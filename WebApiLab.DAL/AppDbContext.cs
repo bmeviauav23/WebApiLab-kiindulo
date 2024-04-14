@@ -9,10 +9,9 @@ namespace WebApiLab.Dal;
 
 public class AppDbContext : DbContext
 {
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    public AppDbContext(DbContextOptions<AppDbContext> options)
+        : base(options)
     {
-        optionsBuilder.UseSqlServer(@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=NEPTUN;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False")
-            .LogTo(Console.WriteLine, LogLevel.Debug);
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -90,15 +89,15 @@ public class AppDbContext : DbContext
 }
 
 
-//Csak a kontroller  generálás idejére kommentezd vissza! Ne maradjon a kódban véglegesen.
+//Csak a kontroller generálás idejére kommentezd vissza! Ne maradjon a kódban véglegesen.
 //DbContextOptions<>-t váró DbContext konstruktor szükséges!
 //Megkerülő megoldás ehhez: https://github.com/dotnet/Scaffolding/issues/1765
-//public class AppDbContextFactory : IDesignTimeDbContextFactory<AppDbContext>
-//{
-//    public AppDbContext CreateDbContext(string[] args)
-//    {
-//        var builder = new DbContextOptionsBuilder<AppDbContext>();
-//        builder.UseSqlServer("dummy");
-//        return new AppDbContext(builder.Options);
-//    }
-//}
+public class AppDbContextFactory : IDesignTimeDbContextFactory<AppDbContext>
+{
+    public AppDbContext CreateDbContext(string[] args)
+    {
+        var builder = new DbContextOptionsBuilder<AppDbContext>();
+        builder.UseSqlServer("dummy");
+        return new AppDbContext(builder.Options);
+    }
+}
