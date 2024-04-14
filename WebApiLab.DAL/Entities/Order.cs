@@ -7,6 +7,5 @@ public class Order
     public DateTime OrderDate { get; set; }
 
     public ICollection<OrderItem> OrderItems { get; } = new List<OrderItem>();
-
     public ICollection<Product> Products { get; } = new List<Product>();
 }

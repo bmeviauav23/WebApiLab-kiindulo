@@ -25,23 +25,25 @@ public class AppDbContext : DbContext
             .IsRequired();
 
         modelBuilder.Entity<Category>().HasData(
-            new Category("Ital") { Id = 1 }
+            new Category() { Name = "Ital", Id = 1 }
         );
 
         modelBuilder.Entity<Product>().HasData(
-            new Product("Sör") { Id = 1, UnitPrice = 50, CategoryId = 1, ShipmentRegion = ShipmentRegion.Asia },
-            new Product("Bor") { Id = 2, UnitPrice = 550, CategoryId = 1 },
-            new Product("Tej") { Id = 3, UnitPrice = 260, CategoryId = 1 },
-            new Product("Whiskey")
+            new Product() { Name = "Sör", Id = 1, UnitPrice = 50, CategoryId = 1, ShipmentRegion = ShipmentRegion.Asia },
+            new Product() { Name = "Bor", Id = 2, UnitPrice = 550, CategoryId = 1 },
+            new Product() { Name = "Tej", Id = 3, UnitPrice = 260, CategoryId = 1 },
+            new Product()
             {
                 Id = 4,
+                Name = "Whiskey",
                 UnitPrice = 960,
                 CategoryId = 1,
                 ShipmentRegion = ShipmentRegion.Australia
             },
-            new Product("Rum")
+            new Product()
             {
                 Id = 5,
+                Name = "Rum",
                 UnitPrice = 960,
                 CategoryId = 1,
                 ShipmentRegion = ShipmentRegion.Eu | ShipmentRegion.NorthAmerica
@@ -49,7 +51,7 @@ public class AppDbContext : DbContext
         );
 
         modelBuilder.Entity<Order>().HasData(
-            new Order { Id = 1, OrderDate = new DateTime(2019, 02, 01) }
+            new Order { Id = 1, OrderDate = new DateTime(2024, 02, 01) }
         );
 
         modelBuilder.Entity<OrderItem>().HasData(
