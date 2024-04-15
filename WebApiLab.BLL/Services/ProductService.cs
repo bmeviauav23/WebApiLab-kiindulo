@@ -33,7 +33,7 @@ public class ProductService : IProductService
         return _context.Products
             .ProjectTo<Product>(_mapper.ConfigurationProvider)
             .SingleOrDefault(p => p.Id == productId)
-            ?? throw new EntityNotFoundException("Nem található a termék");
+            ?? throw new EntityNotFoundException("Nem található a termék", productId);
     }
 
     public Product InsertProduct(Product newProduct)
@@ -47,7 +47,7 @@ public class ProductService : IProductService
     public Product UpdateProduct(int productId, Product updatedProduct)
     {
         var efProduct = _context.Products.SingleOrDefault(p => p.Id == productId)
-            ?? throw new EntityNotFoundException("Nem található a termék");
+            ?? throw new EntityNotFoundException("Nem található a termék", productId);
         _mapper.Map(updatedProduct, efProduct);
         _context.SaveChanges();
         return GetProduct(efProduct.Id);
@@ -56,7 +56,7 @@ public class ProductService : IProductService
     public void DeleteProduct(int productId)
     {
         var efProduct = _context.Products.SingleOrDefault(p => p.Id == productId)
-            ?? throw new EntityNotFoundException("Nem található a termék");
+            ?? throw new EntityNotFoundException("Nem található a termék", productId);
         _context.Products.Remove(efProduct);
         _context.SaveChanges();
     }

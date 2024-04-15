@@ -92,12 +92,12 @@ public class AppDbContext : DbContext
 //Csak a kontroller generálás idejére kommentezd vissza! Ne maradjon a kódban véglegesen.
 //DbContextOptions<>-t váró DbContext konstruktor szükséges!
 //Megkerülő megoldás ehhez: https://github.com/dotnet/Scaffolding/issues/1765
-public class AppDbContextFactory : IDesignTimeDbContextFactory<AppDbContext>
-{
-    public AppDbContext CreateDbContext(string[] args)
-    {
-        var builder = new DbContextOptionsBuilder<AppDbContext>();
-        builder.UseSqlServer("dummy");
-        return new AppDbContext(builder.Options);
-    }
-}
+//public class AppDbContextFactory : IDesignTimeDbContextFactory<AppDbContext>
+//{
+//    public AppDbContext CreateDbContext(string[] args)
+//    {
+//        var builder = new DbContextOptionsBuilder<AppDbContext>();
+//        builder.UseSqlServer("dummy");
+//        return new AppDbContext(builder.Options);
+//    }
+//}
