@@ -18,38 +18,38 @@ public class ProductsController : ControllerBase
 
     // GET: api/<ProductsController>
     [HttpGet]
-    public ActionResult<IEnumerable<Product>> Get()
+    public async Task<ActionResult<IEnumerable<Product>>> Get()
     {
-        return _productService.GetProducts();
+        return await _productService.GetProductsAsync();
     }
 
     // GET api/<ProductsController>/5
     [HttpGet("{id}")]
-    public ActionResult<Product> Get(int id)
+    public async Task<ActionResult<Product>> Get(int id)
     {
-        return _productService.GetProduct(id);
+        return await _productService.GetProductAsync(id);
     }
 
     // POST api/<ProductsController>
     [HttpPost]
-    public ActionResult<Product> Post([FromBody] Product product)
+    public async Task<ActionResult<Product>> Post([FromBody] Product product)
     {
-        var created = _productService.InsertProduct(product);
+        var created = await _productService.InsertProductAsync(product);
         return CreatedAtAction(nameof(Get), new { id = created.Id }, created);
     }
 
     // PUT api/<ProductsController>/5
     [HttpPut("{id}")]
-    public ActionResult<Product> Put(int id, [FromBody] Product product)
+    public async Task<ActionResult<Product>> Put(int id, [FromBody] Product product)
     {
-        return _productService.UpdateProduct(id, product);
+        return await _productService.UpdateProductAsync(id, product);
     }
 
     // DELETE api/<ProductsController>/5
     [HttpDelete("{id}")]
-    public ActionResult Delete(int id)
+    public async Task<ActionResult> Delete(int id)
     {
-        _productService.DeleteProduct(id);
+        await _productService.DeleteProductAsync(id);
         return NoContent();
     }
 }

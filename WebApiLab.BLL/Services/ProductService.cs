@@ -5,6 +5,7 @@ using WebApiLab.Dal;
 using WebApiLab.Bll.Dtos;
 using AutoMapper.QueryableExtensions;
 using WebApiLab.Bll.Exceptions;
+using Microsoft.EntityFrameworkCore;
 
 namespace WebApiLab.Bll.Services;
 
@@ -19,45 +20,45 @@ public class ProductService : IProductService
         _mapper = mapper;
     }
 
-    public List<Product> GetProducts()
+    public async Task<List<Product>> GetProductsAsync()
     {
-        var products = _context.Products
+        var products = await _context.Products
             .ProjectTo<Product>(_mapper.ConfigurationProvider)
-            .ToList();
+            .ToListAsync();
 
         return products;
     }
 
-    public Product GetProduct(int productId)
+    public async Task<Product> GetProductAsync(int productId)
     {
-        return _context.Products
+        return await _context.Products
             .ProjectTo<Product>(_mapper.ConfigurationProvider)
-            .SingleOrDefault(p => p.Id == productId)
+            .SingleOrDefaultAsync(p => p.Id == productId)
             ?? throw new EntityNotFoundException("Nem található a termék", productId);
     }
 
-    public Product InsertProduct(Product newProduct)
+    public async Task<Product> InsertProductAsync(Product newProduct)
     {
         var efProduct = _mapper.Map<Dal.Entities.Product>(newProduct);
         _context.Products.Add(efProduct);
         _context.SaveChanges();
-        return GetProduct(efProduct.Id);
+        return await GetProductAsync(efProduct.Id);
     }
 
-    public Product UpdateProduct(int productId, Product updatedProduct)
+    public async Task<Product> UpdateProductAsync(int productId, Product updatedProduct)
     {
-        var efProduct = _context.Products.SingleOrDefault(p => p.Id == productId)
+        var efProduct = await _context.Products.SingleOrDefaultAsync(p => p.Id == productId)
             ?? throw new EntityNotFoundException("Nem található a termék", productId);
         _mapper.Map(updatedProduct, efProduct);
-        _context.SaveChanges();
-        return GetProduct(efProduct.Id);
+        await _context.SaveChangesAsync();
+        return await GetProductAsync(efProduct.Id);
     }
 
-    public void DeleteProduct(int productId)
+    public async Task DeleteProductAsync(int productId)
     {
-        var efProduct = _context.Products.SingleOrDefault(p => p.Id == productId)
+        var efProduct = await _context.Products.SingleOrDefaultAsync(p => p.Id == productId)
             ?? throw new EntityNotFoundException("Nem található a termék", productId);
         _context.Products.Remove(efProduct);
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
     }
 }
