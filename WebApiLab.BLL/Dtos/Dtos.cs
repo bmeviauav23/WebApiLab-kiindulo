@@ -15,8 +15,8 @@ namespace WebApiLab.Bll.Dtos
         public ShipmentRegion ShipmentRegion { get; init; }
 
         public int CategoryId { get; init; }
-        public Category Category { get; init; } = null!;
+        public Category? Category { get; init; } = null!;
 
-        public List<Order> Orders { get; init; } = null!;
+        public List<Order>? Orders { get; init; } = null!;
     }
 }
